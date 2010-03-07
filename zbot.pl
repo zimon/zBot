@@ -95,9 +95,8 @@ sub init {
 	use lib "modules";
 	use Configs;
 	use Plugins;
-	use Bot;
 
-	$bot = new Bot(Configs::getBotConfig(\&newMessage,\&backgroundChecks));
+	$bot = new Net::Jabber::Bot(Configs::getBotConfig(\&newMessage,\&backgroundChecks));
 }
 
 

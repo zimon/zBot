@@ -68,8 +68,8 @@ my %botConfig = (
 sub getBotConfig{
 	my $newMessageFunc = shift;
 	my $backgroundChecks = shift;
-	$botConfig{message_callback} = $newMessageFunc;
-	$botConfig{background_activity} = $backgroundChecks;
+	$botConfig{message_function} = $newMessageFunc;
+	$botConfig{background_function} = $backgroundChecks;
 	return \%botConfig;
 }
 
