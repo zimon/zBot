@@ -47,38 +47,20 @@ sub getWeather {
 	my $baseurl = $response->base;
 	return $notfound if($content =~ /Treffer/);
 
-	my $location = $content;
-	$location =~ /<title>wetter\.com Wetter (.*?) Wetter auf einen Blick/;
-	$location = $1;
 
-	$content =~ /END SOI DE rectangle1 Tag(.*?)\.backward_button/s;
-	$content = $1;
-	$content =~ s/<script.*?<\/script>//sg;
-	$content =~ s/<.*?>//g;
+	$content =~ /<b style="font-size:12px;">(.*?)<\/div>/s;
+	$content =~ $1;
 	$content = removeWhiteSpaces($content);
-	$content = decode_entities($content);
 	$content = removeUnwantedChars($content);
+	$content =~ s/<script.*?<\/script>//sg;
+	$content =~ s/<br \/>/\n/sg;
+	$content =~ s/<.*?>//g;
 
-	$content =~ s/.*?\n(.*)/$1/s; # remove first line
-
-	my $answer = "";
-	my $x = 0;
-	my @days = split("Details",$content);
-	foreach my $day (@days) {
-		my @lines = split("\n",$day);
-			if ($x == 1){
-				shift @lines;
-			}
-			last if($x == 2);
-			$answer .= $lines[0]."\n".$lines[1]."\n".$lines[5]."\n".$lines[9]." - ".$lines[13]."\nRegen: ".$lines[17]." mit ".$lines[21]."\n\n";
-			$answer .= $lines[2]."\n".$lines[6]."\n".$lines[10]." - ".$lines[14]."\nRegen: ".$lines[18]." mit ".$lines[22]."\n\n";
-			$answer .= $lines[3]."\n".$lines[7]."\n".$lines[11]." - ".$lines[15]."\nRegen: ".$lines[19]." mit ".$lines[23]."\n\n";
-			$answer .= $lines[4]."\n".$lines[8]."\n".$lines[12]." - ".$lines[16]."\nRegen: ".$lines[20]." mit ".$lines[24]."\n\n\n";
-		$x++;
-	}
-
-	utf8::decode($answer);
-	return "Wettervorhersage für $location:\n$answer";
+	$content = encode_entities($content);
+	$content = decode_entities($content);
+	utf8::decode($content);
+    chomp $content;
+    return $content;
 
 }
 

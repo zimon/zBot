@@ -6,9 +6,11 @@
 use strict;
 use warnings;
 
-use Net::Jabber::Bot;
 use Encode;
 use utf8;
+
+use lib "modules";
+use Bot;
 
 
 # 
